@@ -12,7 +12,7 @@ def tinyMazeSearch(problem):
     """
     s = Directions.SOUTH
     w = Directions.WEST
-    return [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s]
 
 
 def right_hand_maze_search(problem):
@@ -230,7 +230,86 @@ def dfs(problem):
     """
 
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    visited={}
+    parenthoodDictionary={}
+    stack=[]
+    startState = problem.getStartState()
+    visited[startState] = True
+    stack.append(startState)
+    result = []
+    parents=[]
+    lastState=startState
+    while(stack):
+        state = stack.pop()
+        if(not parenthoodDictionary.has_key(state)):
+            parenthoodDictionary[state]=[]
+        # print(queue)
+
+        if(len(state) == 2) :
+            nextStates = problem.getNextStates(state)
+            for i in nextStates:
+                parenthoodDictionary[i]=[]
+            
+            for i in nextStates:    
+                if (not visited.has_key(i[0])):
+                    visited[i[0]] = False
+            for i in nextStates:
+                if (not visited[i[0]]):
+                    parenthoodDictionary[i].append(state)     
+                    parenthoodDictionary[state].append(i)     
+
+        else:
+            nextStates = problem.getNextStates(state[0])
+            for i in nextStates:
+                parenthoodDictionary[i]=[]
+            for i in nextStates:
+                if (not visited.has_key(i[0])):
+                    visited[i[0]] = False
+            for i in nextStates:
+                if (not visited[i[0]]):
+                    parenthoodDictionary[i].append(state)                    
+                    parenthoodDictionary[state].append(i)                    
+
+
+
+            if(problem.isGoalState(state[0])):
+                print('hoooooooooooooooooooooooooooora')
+                result =  getPath(problem,state,parenthoodDictionary)
+                break
+
+     
+        for i in nextStates:
+            if (not visited[i[0]]):
+                visited[i[0]] = True                
+                stack.append(i)
+    
+    return result      
+
+
+def getPath(problem,goal,parenthoodDictionary):
+    w=Directions.WEST
+    s=Directions.SOUTH
+    e=Directions.EAST
+    n=Directions.NORTH
+    result = []
+    state = goal
+    startState = problem.getStartState()
+    while(state != startState):
+        if(state[1] == 'West'):
+            result.insert(0,w)
+        elif state[1] == 'East':
+            result.insert(0,e)
+        elif state[1] == 'South':
+            result.insert(0,s)
+        elif state[1] == 'North':
+            result.insert(0,n)            
+      
+        state = parenthoodDictionary[state][0]
+            
+    print(result)
+    return result
+
 
 
 def bfs(problem):
@@ -239,13 +318,122 @@ def bfs(problem):
     """
 
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    visited={}
+    parenthoodDictionary={}
+    queue=[]
+    startState = problem.getStartState()
+    visited[startState] = True
+    queue.append(startState)
+    result = []
+    parents=[]
+    lastState=startState
+    while(queue):
+        state = queue.pop(0)
+        if(not parenthoodDictionary.has_key(state)):
+            parenthoodDictionary[state]=[]
+        # print(queue)
+
+        if(len(state) == 2) :
+            nextStates = problem.getNextStates(state)
+            for i in nextStates:
+                parenthoodDictionary[i]=[]
+            
+            for i in nextStates:
+                if (not visited.has_key(i[0])):
+                    visited[i[0]] = False
+            for i in nextStates:
+                if (not visited[i[0]]):
+                    parenthoodDictionary[i].append(state)     
+                    parenthoodDictionary[state].append(i)     
+
+        else:
+            nextStates = problem.getNextStates(state[0])
+            for i in nextStates:
+                parenthoodDictionary[i]=[]
+            for i in nextStates:
+                if (not visited.has_key(i[0])):
+                    visited[i[0]] = False
+            for i in nextStates:
+                if (not visited[i[0]]):
+                    parenthoodDictionary[i].append(state)                    
+                    parenthoodDictionary[state].append(i)                    
 
 
+
+            if(problem.isGoalState(state[0])):
+                print('hoooooooooooooooooooooooooooora')
+                result =  getPath(problem,state,parenthoodDictionary)
+                break
+
+        
+        for i in nextStates:
+            if (not visited[i[0]]):
+                visited[i[0]] = True                
+                queue.append(i)
+    
+    return result
 def ucs(problem):
+    
     """
     Q6: Search the node of least total cost first.
     """
 
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    
+    visited={}
+    parenthoodDictionary={}
+    queue=[]
+    startState = problem.getStartState()
+    visited[startState] = True
+    queue = util.PriorityQueue
+    print(problem.cost_function(startState))
+    
+    result = []
+    parents=[]
+    lastState=startState
+    while(queue):
+        state = queue.pop(0)
+        if(not parenthoodDictionary.has_key(state)):
+            parenthoodDictionary[state]=[]
+        # print(queue)
+
+        if(len(state) == 2) :
+            nextStates = problem.getNextStates(state)
+            for i in nextStates:
+                parenthoodDictionary[i]=[]
+            
+            for i in nextStates:
+                if (not visited.has_key(i[0])):
+                    visited[i[0]] = False
+            for i in nextStates:
+                if (not visited[i[0]]):
+                    parenthoodDictionary[i].append(state)     
+                    parenthoodDictionary[state].append(i)     
+
+        else:
+            nextStates = problem.getNextStates(state[0])
+            for i in nextStates:
+                parenthoodDictionary[i]=[]
+            for i in nextStates:
+                if (not visited.has_key(i[0])):
+                    visited[i[0]] = False
+            for i in nextStates:
+                if (not visited[i[0]]):
+                    parenthoodDictionary[i].append(state)                    
+                    parenthoodDictionary[state].append(i)                    
+
+
+
+            if(problem.isGoalState(state[0])):
+                print('hoooooooooooooooooooooooooooora')
+                result =  getPath(problem,state,parenthoodDictionary)
+                break
+
+        
+        for i in nextStates:
+            if (not visited[i[0]]):
+                visited[i[0]] = True                
+                queue.append(i)
+    
+    return result
