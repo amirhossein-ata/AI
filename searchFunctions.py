@@ -380,24 +380,21 @@ def ucs(problem):
     """
 
     "*** YOUR CODE HERE ***"
-    
     visited={}
     parenthoodDictionary={}
-    queue=[]
+    queue = util.PriorityQueue()
     startState = problem.getStartState()
     visited[startState] = True
-    queue = util.PriorityQueue
-    print(problem.cost_function(startState))
-    
+
+    queue.push(startState,0)
     result = []
-    parents=[]
-    lastState=startState
     while(queue):
-        state = queue.pop(0)
+        state = queue.pop()
         if(not parenthoodDictionary.has_key(state)):
             parenthoodDictionary[state]=[]
         # print(queue)
 
+        # print(parenthoodDictionary[state])
         if(len(state) == 2) :
             nextStates = problem.getNextStates(state)
             for i in nextStates:
@@ -406,21 +403,30 @@ def ucs(problem):
             for i in nextStates:
                 if (not visited.has_key(i[0])):
                     visited[i[0]] = False
+
             for i in nextStates:
+                cost = problem.cost_function(i)
                 if (not visited[i[0]]):
                     parenthoodDictionary[i].append(state)     
+                    parenthoodDictionary[i].append(cost)
                     parenthoodDictionary[state].append(i)     
 
         else:
             nextStates = problem.getNextStates(state[0])
             for i in nextStates:
                 parenthoodDictionary[i]=[]
+           
             for i in nextStates:
                 if (not visited.has_key(i[0])):
                     visited[i[0]] = False
+
+            cost_of_father = parenthoodDictionary[state][1]
+            # print('fathers cooooooooooost is :',cost_of_father)
             for i in nextStates:
+                cost = problem.cost_function(i)
                 if (not visited[i[0]]):
-                    parenthoodDictionary[i].append(state)                    
+                    parenthoodDictionary[i].append(state)
+                    parenthoodDictionary[i].append(cost+cost_of_father)
                     parenthoodDictionary[state].append(i)                    
 
 
@@ -430,10 +436,18 @@ def ucs(problem):
                 result =  getPath(problem,state,parenthoodDictionary)
                 break
 
-        
+        parent_cost = 0       
+        print(parenthoodDictionary[state]) 
+        if(len(parenthoodDictionary[state]) > 1):
+            if(not isinstance(parenthoodDictionary[state][1],tuple)):
+                parent_cost = parenthoodDictionary[state][1]
         for i in nextStates:
+            child_cost = problem.cost_function(i)
+            print('paaaaarent cost is : ',parent_cost,type(parent_cost) ,' child cost is : ',child_cost,type(child_cost))
+            total_cost = parent_cost + child_cost
+            print('so in total : ',parent_cost + child_cost)
             if (not visited[i[0]]):
                 visited[i[0]] = True                
-                queue.append(i)
+                queue.push(i,total_cost)
     
     return result

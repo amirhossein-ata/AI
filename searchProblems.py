@@ -270,18 +270,16 @@ class DangerousPositionSearch(PositionSearchProblem):
         :param state: tuple (x,y)
         :return: int
         """
-        print self.ghosts
-        print state
         for i in self.ghosts:
-            if state == i:
+            if state[0] == i:
                 return 1000
         for i in self.ghosts:
-            if state == (i[0]+1,i[1]):
+            if state[0] == (i[0]+1,i[1]):
                 return 2
-            elif state == (i[0]+1,i[1]+1):
+            elif state[0] == (i[0]+1,i[1]+1):
                 return 2
-            elif state == (i[0],i[1]+1):
+            elif state[0] == (i[0],i[1]+1):
                 return 2
-            elif state ==(i[0]+1,i[1]+1):
+            elif state[0] ==(i[0]+1,i[1]+1):
                 return 2
         return 1
