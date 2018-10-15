@@ -184,20 +184,35 @@ class ClockwiseFoodProblem(SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem, it's okey if you don't have any additional code
         "*** YOUR CODE HERE ***"
-
+   
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        foods = []
+        for i in range(len(list(self.foods))):
+            for j in range(len(list(self.foods[i]))):
+                if(self.foods[i][j]):
+                    foods.append((i,j))
+        
+        return (self.startingPosition[0],self.startingPosition[1],'East',tuple(foods))
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # util.raiseNotDefined()
+        # print('goal is : ',self.goal)
+        # print('goal:',state , self.goal)
+        # print(state[3])
+        
+
+        if (state[0],state[1]) == self.goal and len(state[3]) == 0:
+            return True
+        else:
+            return False
 
     def getNextStates(self, state):
         """
@@ -211,17 +226,44 @@ class ClockwiseFoodProblem(SearchProblem):
         """
 
         next_states = []
-        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+        # print('state passed to getNextStates is : ' ,state)
+    
+        # if(isinstance(state[0],tuple)):
+        #     x,y=state[0]
+        # elif (isinstance(state,tuple)):
+        # print(state[0])
+
+        x,y=state[0],state[1]
+        directions = (Directions.RIGHT[state[2]],state[2])
+        foods = list(state[3])[:]
+        for action in directions:
             # Add a next state to the next_states list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall, or hit a food:
             #   x,y = currentPosition
             #   dx, dy = Actions.directionToVector(action)
-            #   nextx, nexty = int(x + dx), int(y + dy)
-            #   hitsWall = self.walls[nextx][nexty]
+            #    nextx, nexty = int(x + dx), int(y + dy)
+            #   hitsWall = self.walls[nextx][nexty] 
             #   hitsFood = self.foods[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            dx,dy = Actions.directionToVector(action)
+            # print('dddddddd',x,dx,y,dy)
+            nextx,nexty = int(x+dx),int(y+dy)
+            nextState = (nextx,nexty)
+            hitsWall = self.walls[nextx][nexty]
+            tempFoods = self.foods.deepCopy()
 
+            hitsFood = (nextx ,nexty) in foods
+           
+                # print('temssssssssssssssss',tempFoods[nextx][nexty])
+            # print(tempFoods)
+
+            if(not hitsWall):
+                newFoodList = foods[:]
+                if(hitsFood):
+                    newFoodList.remove((nextx,nexty))
+                next_states.append(((nextx,nexty , action ,tuple(newFoodList) ),action,1))
+            
         self._expanded += 1  # DO NOT CHANGE
         return next_states
 
@@ -275,11 +317,11 @@ class DangerousPositionSearch(PositionSearchProblem):
                 return 1000
         for i in self.ghosts:
             if state[0] == (i[0]+1,i[1]):
-                return 2
+                return 5
             elif state[0] == (i[0]+1,i[1]+1):
-                return 2
+                return 5
             elif state[0] == (i[0],i[1]+1):
-                return 2
+                return 5
             elif state[0] ==(i[0]+1,i[1]+1):
-                return 2
+                return 5
         return 1

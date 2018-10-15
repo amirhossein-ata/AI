@@ -1,6 +1,6 @@
 import util
 
-from game import Directions
+from game import Directions , Actions
 
 UNREACHABLE_GOAL_STATE = [Directions.STOP]
 
@@ -287,26 +287,26 @@ def dfs(problem):
     return result      
 
 
-def getPath(problem,goal,parenthoodDictionary):
+def getPath(problem,startState,goal,parenthoodDictionary):
     w=Directions.WEST
     s=Directions.SOUTH
     e=Directions.EAST
     n=Directions.NORTH
     result = []
     state = goal
-    startState = problem.getStartState()
+    # print(startState)
+    print(problem.getStartState())
+    print(goal)
+  
     while(state != startState):
-        if(state[1] == 'West'):
-            result.insert(0,w)
-        elif state[1] == 'East':
-            result.insert(0,e)
-        elif state[1] == 'South':
-            result.insert(0,s)
-        elif state[1] == 'North':
-            result.insert(0,n)            
-      
-        state = parenthoodDictionary[state][0]
-            
+        print('state is : ',state)
+        childx,childy=state[0],state[1]
+        state = parenthoodDictionary[state]
+        print('state pp is : ',state)
+        
+        parentx,parenty = state[0],state[1]
+        action = Actions.vectorToDirection((childx -parentx , childy - parenty))
+        result.insert(0,action)            
     print(result)
     return result
 
@@ -323,56 +323,47 @@ def bfs(problem):
     parenthoodDictionary={}
     queue=[]
     startState = problem.getStartState()
+    parenthoodDictionary[startState]=[]
     visited[startState] = True
     queue.append(startState)
     result = []
-    parents=[]
-    lastState=startState
+
+
     while(queue):
+
         state = queue.pop(0)
-        if(not parenthoodDictionary.has_key(state)):
-            parenthoodDictionary[state]=[]
-        # print(queue)
-
-        if(len(state) == 2) :
-            nextStates = problem.getNextStates(state)
-            for i in nextStates:
-                parenthoodDictionary[i]=[]
+        nextStates = problem.getNextStates(state)
             
-            for i in nextStates:
-                if (not visited.has_key(i[0])):
-                    visited[i[0]] = False
-            for i in nextStates:
-                if (not visited[i[0]]):
-                    parenthoodDictionary[i].append(state)     
-                    parenthoodDictionary[state].append(i)     
 
-        else:
-            nextStates = problem.getNextStates(state[0])
-            for i in nextStates:
-                parenthoodDictionary[i]=[]
-            for i in nextStates:
-                if (not visited.has_key(i[0])):
-                    visited[i[0]] = False
-            for i in nextStates:
-                if (not visited[i[0]]):
-                    parenthoodDictionary[i].append(state)                    
-                    parenthoodDictionary[state].append(i)                    
+        for i in nextStates:
 
+            if(not parenthoodDictionary.has_key(i[0])):
+                parenthoodDictionary[i[0]]=[]
+            
+            if (not visited.has_key(i[0])):
+                visited[i[0]] = False
+            
+            if (not visited[i[0]]):
+                parenthoodDictionary[i[0]]=state                    
+                # parenthoodDictionary[state].append(i)                    
 
-
-            if(problem.isGoalState(state[0])):
-                print('hoooooooooooooooooooooooooooora')
-                result =  getPath(problem,state,parenthoodDictionary)
-                break
+        if(problem.isGoalState(state)):
+           
+            print('hoooooooooooooooooooooooooooora' , state)
+           
+            result =  getPath(problem,startState,state,parenthoodDictionary)
+           
+            break
 
         
         for i in nextStates:
             if (not visited[i[0]]):
-                visited[i[0]] = True                
-                queue.append(i)
+                visited[i[0]] = True
+                queue.append(i[0])
     
+    print('omad biron?')
     return result
+
 def ucs(problem):
     
     """
