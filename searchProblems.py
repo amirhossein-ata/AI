@@ -190,11 +190,11 @@ class ClockwiseFoodProblem(SearchProblem):
         Returns the start state (in your state space, not the full Pacman state space)
         """
         "*** YOUR CODE HERE ***"
-        foods = []
+        foods = set()
         for i in range(len(list(self.foods))):
             for j in range(len(list(self.foods[i]))):
                 if(self.foods[i][j]):
-                    foods.append((i,j))
+                    foods.add((i,j))
         
         return (self.startingPosition[0],self.startingPosition[1],'East',tuple(foods))
 
@@ -235,7 +235,7 @@ class ClockwiseFoodProblem(SearchProblem):
 
         x,y=state[0],state[1]
         directions = (Directions.RIGHT[state[2]],state[2])
-        foods = list(state[3])[:]
+        foods = set(state[3])
         for action in directions:
             # Add a next state to the next_states list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall, or hit a food:
@@ -251,7 +251,6 @@ class ClockwiseFoodProblem(SearchProblem):
             nextx,nexty = int(x+dx),int(y+dy)
             nextState = (nextx,nexty)
             hitsWall = self.walls[nextx][nexty]
-            tempFoods = self.foods.deepCopy()
 
             hitsFood = (nextx ,nexty) in foods
            
@@ -259,7 +258,7 @@ class ClockwiseFoodProblem(SearchProblem):
             # print(tempFoods)
 
             if(not hitsWall):
-                newFoodList = foods[:]
+                newFoodList = foods.copy()
                 if(hitsFood):
                     newFoodList.remove((nextx,nexty))
                 next_states.append(((nextx,nexty , action ,tuple(newFoodList) ),action,1))

@@ -345,12 +345,11 @@ def bfs(problem):
             
             if (not visited[i[0]]):
                 parenthoodDictionary[i[0]]=state                    
-                # parenthoodDictionary[state].append(i)                    
+        
 
         if(problem.isGoalState(state)):
            
-            print('hoooooooooooooooooooooooooooora' , state)
-           
+            print('hoooooooooooooooooooooooooooora' , state)   
             result =  getPath(problem,startState,state,parenthoodDictionary)
            
             break
