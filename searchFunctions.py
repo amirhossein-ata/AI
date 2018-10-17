@@ -40,8 +40,7 @@ def right_hand_maze_search(problem):
     startState = problem.getStartState()
     nextStates= problem.getNextStates(startState)
     
-    for i in nextStates:
-        print("direction is :",i[1] ,"and state is : ",i[0])
+    
     
     state=startState
     result=[]
@@ -50,8 +49,6 @@ def right_hand_maze_search(problem):
     while(not problem.isGoalState(state)):
         nextStates = problem.getNextStates(state)
         if(len(nextStates)==1):
-            print("got no choice dude!")
-            print(nextStates[0][1])
             lastDirection=nextStates[0][1]
             state=nextStates[0][0]
             if(lastDirection)=='West':
@@ -72,8 +69,7 @@ def right_hand_maze_search(problem):
                     for i in nextStates:
                         if(i[1] == 'North'):
                             state=i[0]
-                    print("nextStates : " , nextStates)
-                    print('last direction is : '+lastDirection + 'going North ' , state)
+
                     counter +=1
                 else:
 
@@ -85,8 +81,6 @@ def right_hand_maze_search(problem):
                             if(i[1] == 'West'):
                                 state=i[0] 
                                 
-                        print("nextStates : " , nextStates)
-                        print('last direction is : '+lastDirection + 'going West ' , state)
                         counter +=1
                         
                     elif 'South' in [i[1] for i in nextStates]:
@@ -96,8 +90,6 @@ def right_hand_maze_search(problem):
                             if(i[1] == 'South'):
                                 state=i[0] 
 
-                        print("nextStates : " , nextStates)            
-                        print('last direction is : '+lastDirection + 'going South ' , state) 
                         
                         counter +=1
 
@@ -110,8 +102,6 @@ def right_hand_maze_search(problem):
                         if(i[1] == 'East'):
                             state=i[0] 
 
-                    print("nextStates : " , nextStates)            
-                    print('last direction is : '+lastDirection + 'going east ' , state)
         
                     counter +=1
 
@@ -123,8 +113,6 @@ def right_hand_maze_search(problem):
                             if(i[1] == 'North'):
                                 state=i[0] 
 
-                        print("nextStates : " , nextStates)            
-                        print('last direction is : '+lastDirection + 'going north ' , state)
             
                         counter +=1
 
@@ -135,8 +123,6 @@ def right_hand_maze_search(problem):
                             if(i[1] == 'West'):
                                 state=i[0] 
 
-                        print("nextStates : " , nextStates)            
-                        print('last direction is : '+lastDirection + 'going west ' , state)
                         
                         counter +=1
 
@@ -151,8 +137,6 @@ def right_hand_maze_search(problem):
                         if(i[1] == 'South'):
                             state=i[0] 
 
-                    print("nextStates : " , nextStates)            
-                    print('last direction is : '+lastDirection + 'going south ' , state)
             
                     counter +=1
 
@@ -165,8 +149,6 @@ def right_hand_maze_search(problem):
                             if(i[1] == 'East'):
                                 state=i[0] 
 
-                        print("nextStates : " , nextStates)            
-                        print('last direction is : '+lastDirection + 'going east ' , state)
             
                         counter +=1
 
@@ -177,8 +159,6 @@ def right_hand_maze_search(problem):
                             if(i[1] == 'North'):
                                 state=i[0] 
 
-                        print("nextStates : " , nextStates)            
-                        print('last direction is : '+lastDirection + 'going north ' , state)
             
                         counter +=1
 
@@ -191,8 +171,6 @@ def right_hand_maze_search(problem):
                         if(i[1] == 'West'):
                             state=i[0] 
                             
-                    print("nextStates : " , nextStates)
-                    print('last direction is : '+lastDirection + 'going West ' , state)
                     counter +=1
                 else:
 
@@ -204,8 +182,6 @@ def right_hand_maze_search(problem):
                             if(i[1] == 'South'):
                                 state=i[0] 
 
-                        print("nextStates : " , nextStates)            
-                        print('last direction is : '+lastDirection + 'going south ' , state)
                 
                         counter +=1
 
@@ -216,8 +192,6 @@ def right_hand_maze_search(problem):
                             if(i[1] == 'East'):
                                 state=i[0] 
 
-                        print("nextStates : " , nextStates)            
-                        print('last direction is : '+lastDirection + 'going east ' , state)
             
                         counter +=1
 
@@ -230,62 +204,37 @@ def dfs(problem):
     """
 
     "*** YOUR CODE HERE ***"
-
     visited={}
     parenthoodDictionary={}
-    stack=[]
+    stack=util.Queue()
     startState = problem.getStartState()
+    parenthoodDictionary[startState]=[]
     visited[startState] = True
-    stack.append(startState)
+    stack.push(startState)
     result = []
-    parents=[]
-    lastState=startState
-    while(stack):
+
+
+    while(not stack.isEmpty()):
+
         state = stack.pop()
-        if(not parenthoodDictionary.has_key(state)):
-            parenthoodDictionary[state]=[]
-        # print(queue)
-
-        if(len(state) == 2) :
-            nextStates = problem.getNextStates(state)
-            for i in nextStates:
-                parenthoodDictionary[i]=[]
+        nextStates = problem.getNextStates(state)
             
-            for i in nextStates:    
-                if (not visited.has_key(i[0])):
-                    visited[i[0]] = False
-            for i in nextStates:
-                if (not visited[i[0]]):
-                    parenthoodDictionary[i].append(state)     
-                    parenthoodDictionary[state].append(i)     
 
-        else:
-            nextStates = problem.getNextStates(state[0])
-            for i in nextStates:
-                parenthoodDictionary[i]=[]
-            for i in nextStates:
-                if (not visited.has_key(i[0])):
-                    visited[i[0]] = False
-            for i in nextStates:
-                if (not visited[i[0]]):
-                    parenthoodDictionary[i].append(state)                    
-                    parenthoodDictionary[state].append(i)                    
-
-
-
-            if(problem.isGoalState(state[0])):
-                print('hoooooooooooooooooooooooooooora')
-                result =  getPath(problem,state,parenthoodDictionary)
-                break
-
-     
         for i in nextStates:
-            if (not visited[i[0]]):
-                visited[i[0]] = True                
-                stack.append(i)
-    
-    return result      
 
+            if(not parenthoodDictionary.has_key(i[0])):
+                parenthoodDictionary[i[0]]=[]
+                parenthoodDictionary[i[0]]=state                    
+                stack.push(i[0])
+
+        if(problem.isGoalState(state)):
+           
+            result =  getPath(problem,startState,state,parenthoodDictionary)
+            return result
+            
+
+        
+    return [Directions.STOP]
 
 def getPath(problem,startState,goal,parenthoodDictionary):
     w=Directions.WEST
@@ -294,20 +243,15 @@ def getPath(problem,startState,goal,parenthoodDictionary):
     n=Directions.NORTH
     result = []
     state = goal
-    # print(startState)
-    print(problem.getStartState())
-    print(goal)
   
     while(state != startState):
-        print('state is : ',state)
         childx,childy=state[0],state[1]
         state = parenthoodDictionary[state]
-        print('state pp is : ',state)
         
         parentx,parenty = state[0],state[1]
         action = Actions.vectorToDirection((childx -parentx , childy - parenty))
         result.insert(0,action)            
-    print(result)
+
     return result
 
 
@@ -321,17 +265,17 @@ def bfs(problem):
     
     visited={}
     parenthoodDictionary={}
-    queue=[]
+    queue = util.Queue()
     startState = problem.getStartState()
     parenthoodDictionary[startState]=[]
-    visited[startState] = True
-    queue.append(startState)
+    # visited[startState] = True
+    queue.push(startState)
     result = []
 
 
-    while(queue):
+    while(not queue.isEmpty()):
 
-        state = queue.pop(0)
+        state = queue.pop()
         nextStates = problem.getNextStates(state)
             
 
@@ -339,28 +283,35 @@ def bfs(problem):
 
             if(not parenthoodDictionary.has_key(i[0])):
                 parenthoodDictionary[i[0]]=[]
-            
-            if (not visited.has_key(i[0])):
-                visited[i[0]] = False
-            
-            if (not visited[i[0]]):
                 parenthoodDictionary[i[0]]=state                    
+                queue.push(i[0])
         
 
+    
         if(problem.isGoalState(state)):
            
-            print('hoooooooooooooooooooooooooooora' , state)   
             result =  getPath(problem,startState,state,parenthoodDictionary)
-           
+            return result           
             break
 
         
-        for i in nextStates:
-            if (not visited[i[0]]):
-                visited[i[0]] = True
-                queue.append(i[0])
-    
-    print('omad biron?')
+    return [Directions.STOP]
+
+def ucs_get_path(problem,startState,goal,parenthoodDictionary):
+    w=Directions.WEST
+    s=Directions.SOUTH
+    e=Directions.EAST
+    n=Directions.NORTH
+    result = []
+    state = goal
+
+    while(state != startState):
+        childx,childy=state[0],state[1]
+        state = parenthoodDictionary[state][0]
+        
+        parentx,parenty = state[0],state[1]
+        action = Actions.vectorToDirection((childx -parentx , childy - parenty))
+        result.insert(0,action)            
     return result
 
 def ucs(problem):
@@ -375,69 +326,28 @@ def ucs(problem):
     queue = util.PriorityQueue()
     startState = problem.getStartState()
     visited[startState] = True
-
+    parenthoodDictionary[startState]=[startState,0]
     queue.push(startState,0)
     result = []
     while(queue):
         state = queue.pop()
-        if(not parenthoodDictionary.has_key(state)):
-            parenthoodDictionary[state]=[]
-        # print(queue)
+        nextStates = problem.getNextStates(state)
 
-        # print(parenthoodDictionary[state])
-        if(len(state) == 2) :
-            nextStates = problem.getNextStates(state)
-            for i in nextStates:
-                parenthoodDictionary[i]=[]
-            
-            for i in nextStates:
-                if (not visited.has_key(i[0])):
-                    visited[i[0]] = False
-
-            for i in nextStates:
-                cost = problem.cost_function(i)
-                if (not visited[i[0]]):
-                    parenthoodDictionary[i].append(state)     
-                    parenthoodDictionary[i].append(cost)
-                    parenthoodDictionary[state].append(i)     
-
-        else:
-            nextStates = problem.getNextStates(state[0])
-            for i in nextStates:
-                parenthoodDictionary[i]=[]
-           
-            for i in nextStates:
-                if (not visited.has_key(i[0])):
-                    visited[i[0]] = False
-
-            cost_of_father = parenthoodDictionary[state][1]
-            # print('fathers cooooooooooost is :',cost_of_father)
-            for i in nextStates:
-                cost = problem.cost_function(i)
-                if (not visited[i[0]]):
-                    parenthoodDictionary[i].append(state)
-                    parenthoodDictionary[i].append(cost+cost_of_father)
-                    parenthoodDictionary[state].append(i)                    
-
-
-
-            if(problem.isGoalState(state[0])):
-                print('hoooooooooooooooooooooooooooora')
-                result =  getPath(problem,state,parenthoodDictionary)
-                break
-
-        parent_cost = 0       
-        print(parenthoodDictionary[state]) 
-        if(len(parenthoodDictionary[state]) > 1):
-            if(not isinstance(parenthoodDictionary[state][1],tuple)):
-                parent_cost = parenthoodDictionary[state][1]
+        parent_cost = parenthoodDictionary[state][1]
         for i in nextStates:
-            child_cost = problem.cost_function(i)
-            print('paaaaarent cost is : ',parent_cost,type(parent_cost) ,' child cost is : ',child_cost,type(child_cost))
-            total_cost = parent_cost + child_cost
-            print('so in total : ',parent_cost + child_cost)
-            if (not visited[i[0]]):
-                visited[i[0]] = True                
-                queue.push(i,total_cost)
+            cost = problem.cost_function(i)
+
+            if(not parenthoodDictionary.has_key(i[0])):
+            
+                parenthoodDictionary[i[0]]=[]
+                parenthoodDictionary[i[0]]=[state,cost+parent_cost]
+                queue.push(i[0],parenthoodDictionary[i[0]][1])
+        
+     
+
+        if(problem.isGoalState(state)):
+            result =  ucs_get_path(problem,startState,state,parenthoodDictionary)
+            break
+
     
     return result
